@@ -33,7 +33,7 @@ namespace GridTravel
                 // a a x a
                 // a a a a
 
-                //  pos = 6
+                //  pos = 6 
                 //  posX = pos % width
                 //  posY = pos / width
                 if ((newPos = grid.IndexOf(c)) != -1)
