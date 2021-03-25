@@ -240,6 +240,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner.cs" />
+    <Compile Include="StupidGridDistanceHomework.cs" />
     <Compile Include="StupidGridDistance.cs" />
   </ItemGroup>
   <ItemGroup>
