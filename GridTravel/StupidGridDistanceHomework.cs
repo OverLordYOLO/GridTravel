@@ -6,7 +6,7 @@ namespace GridTravel
 {
     public class StupidGridDistanceHomework
     {
-        static void Main()
+        static void Main_()
         {
             int width = Int32.Parse(Console.ReadLine());
             _ = Console.ReadLine(); // height

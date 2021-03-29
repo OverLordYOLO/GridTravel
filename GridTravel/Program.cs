@@ -11,8 +11,20 @@ namespace GridTravel
 
         static void Main()
         {
-            var summary = BenchmarkRunner.Run<Runner>();
-            Console.WriteLine(summary);
+            //var summary = BenchmarkRunner.Run<Runner>();
+            //Console.WriteLine(summary);
+
+            /* ----cdbv  5
+             * abc
+             * cbv
+             * adb
+             */
+
+            var result = PullBackGridDistance.Run("abccbvadb", 3, 3, new string[] { "c", "cdbv" });
+            foreach (var res in result)
+            {
+                Console.WriteLine(res);
+            }
             Console.ReadLine();
         }
 
