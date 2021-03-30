@@ -4,57 +4,35 @@ using System.Linq;
 
 namespace GridTravel
 {
-    public class PullBackGridDistance
+
+    public class Homework
     {
-        /*
-        1) Count occurences of letters from the word in the grid
-        2) Create array with char doubles - pairs[n-1]; where n = number of chars
-        3) Create path map - dictionary<pair, distance>
-            for each pair:
-                a) check if pair exists - skip if yes
-                b) create dict entry
-        4) Pull-back search
-        Remember only distance of previous and current layer's nodes
-        At the end -> previous = current        P = previous; D = distance
-            a) previous = last
-                current = pairs[last-1]
-            for each currentNode:
-                a) save min(Pi+Di)
-        */
-        public static int[] Run(string inGrid, int inHeight, int inWidth, string[] inInputs)
+        public static void Main()
         {
-            var results = new int[inInputs.Length];
-            int width = inWidth;
-            _ = inHeight;
-            string gridText = inGrid;
-            var inputs = inInputs;
+            int width = Int32.Parse(Console.ReadLine());
+            _ = Console.ReadLine(); // height
+            string gridText = Console.ReadLine();
             var grid = gridText.ToArray();
 
 
-
-            for (int i = 0; i < inputs.Length; i++)
+            string input;
+            while ((input = Console.ReadLine()) != String.Empty)
             {
-                var input = inputs[i];
-                //   1) Count occurences of letters from the word in the grid
                 var occurrences = CountOccurences(grid, input.ToCharArray(), out string filteredWord);
                 if (filteredWord.Length > 0)
                 {
-                    //   2) Create array with char doubles -pairs[n - 1]; where n = number of chars
+
                     var pairs = CreatePairs(filteredWord);
-                    //   3) Create path map - dictionary < pair, distance >
                     var pathMap = CreatePathMap(width, filteredWord, occurrences, pairs);
-                    //   4) Pull - back search
                     var shortestPath = FindShortestPath_PullBack(filteredWord, occurrences, pathMap);
-
                     int numberOfStrokes = shortestPath + filteredWord.Length;
-                    results[i] = numberOfStrokes;
-                } else
-                {
-                    results[i] = 0;
+                    Console.WriteLine(numberOfStrokes);
                 }
-
+                else
+                {
+                    Console.WriteLine(0);
+                }
             }
-            return results;
         }
 
         private static int FindShortestPath_PullBack(string word, Dictionary<char, List<int>> occurences, Dictionary<string, int> pathMap)
@@ -73,7 +51,7 @@ namespace GridTravel
             var distances = new List<int>();
             for (int i = 0; i < occurences[word[wordLength]].Count; i++)
                 distances.Add(0);
-                
+
             List<int> currentLayer;
             int pos = 0;
             for (int i = wordLength - 1; i >= 0; i--)
