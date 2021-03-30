@@ -45,7 +45,9 @@ namespace GridTravel
                 //   4) Pull - back search
                 var shortestPath = FindShortestPath_PullBack(input, occurrences, pathMap);
 
-                results[i] = shortestPath;
+                int numberOfStrokes = shortestPath + input.Length;
+
+                results[i] = numberOfStrokes;
             }
             return results;
         }
