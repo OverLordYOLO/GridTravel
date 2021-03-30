@@ -177,7 +177,7 @@ namespace GridTravel
                     }
                 }
             }
-            filteredWord = word.Where(x => occurences.ContainsKey(x)).ToString();
+            filteredWord = new string(word.Where(x => occurences.ContainsKey(x)).ToArray());
             return occurences;
         }
     }
