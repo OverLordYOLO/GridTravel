@@ -36,16 +36,16 @@ namespace GridTravel
             {
                 var input = inputs[i];
                 //   1) Count occurences of letters from the word in the grid
-                var occurrences = CountOccurences(grid, input.ToCharArray());
+                var occurrences = CountOccurences(grid, input.ToCharArray(), out string filteredWord);
 
                 //   2) Create array with char doubles -pairs[n - 1]; where n = number of chars
-                var pairs = CreatePairs(input);
+                var pairs = CreatePairs(filteredWord);
                 //   3) Create path map - dictionary < pair, distance >
-                var pathMap = CreatePathMap(width, input, occurrences, pairs);
+                var pathMap = CreatePathMap(width, filteredWord, occurrences, pairs);
                 //   4) Pull - back search
-                var shortestPath = FindShortestPath_PullBack(input, occurrences, pathMap);
+                var shortestPath = FindShortestPath_PullBack(filteredWord, occurrences, pathMap);
 
-                int numberOfStrokes = shortestPath + input.Length;
+                int numberOfStrokes = shortestPath + filteredWord.Length;
 
                 results[i] = numberOfStrokes;
             }
@@ -159,7 +159,7 @@ namespace GridTravel
             return pairs;
         }
 
-        private static Dictionary<char, List<int>> CountOccurences(char[] grid, char[] word)
+        private static Dictionary<char, List<int>> CountOccurences(char[] grid, char[] word, out string filteredWord)
         {
             var occurences = new Dictionary<char, List<int>>();
             for (int i = 0; i < grid.Length; i++)
@@ -177,6 +177,7 @@ namespace GridTravel
                     }
                 }
             }
+            filteredWord = word.Where(x => occurences.ContainsKey(x)).ToString();
             return occurences;
         }
     }
