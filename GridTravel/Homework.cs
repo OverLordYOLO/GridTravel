@@ -9,15 +9,17 @@ namespace GridTravel
     {
         public static void Main()
         {
-            int width = Int32.Parse(Console.ReadLine());
-            _ = Console.ReadLine(); // height
-            string gridText = Console.ReadLine();
-            var grid = gridText.ToArray();
+
 
 
             string input;
             while ((input = Console.ReadLine()) != String.Empty)
             {
+                int width = Int32.Parse(input);
+                _ = Console.ReadLine(); // height
+                string gridText = Console.ReadLine();
+                var grid = gridText.ToArray();
+
                 var occurrences = CountOccurences(grid, input.ToCharArray(), out string filteredWord);
                 if (filteredWord.Length > 0)
                 {
