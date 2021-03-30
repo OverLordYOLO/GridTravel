@@ -241,7 +241,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runner.cs" />
     <Compile Include="PullBackGridDistance.cs" />
-    <Compile Include="StupidGridDistanceHomework.cs" />
+    <Compile Include="Homework.cs" />
     <Compile Include="StupidGridDistance.cs" />
   </ItemGroup>
   <ItemGroup>

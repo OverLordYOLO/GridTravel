@@ -9,7 +9,7 @@ namespace GridTravel
     class Program
     {
 
-        static void Main()
+        static void Main_()
         {
             //var summary = BenchmarkRunner.Run<Runner>();
             //Console.WriteLine(summary);
@@ -20,7 +20,7 @@ namespace GridTravel
              * adb
              */
 
-            var result = PullBackGridDistance.Run("abccbvadb", 3, 3, new string[] { "c", "cdbv" });
+            var result = PullBackGridDistance.Run("ABCBFECDF", 3, 3, new string[] { "ABCDEFAx" });
             foreach (var res in result)
             {
                 Console.WriteLine(res);
