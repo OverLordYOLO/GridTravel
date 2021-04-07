@@ -103,7 +103,9 @@ namespace GridTravel
                     {
                         for (int j = 0; j < secondPair.Count; j++)
                         {
-                            pathMap.Add(CreateKeyForMap(pair, i, j), CountDistance(width, firstPair[i], secondPair[j]));
+                            var key = CreateKeyForMap(pair, i, j);
+                            if (!pathMap.ContainsKey(key))
+                                pathMap.Add(CreateKeyForMap(pair, i, j), CountDistance(width, firstPair[i], secondPair[j]));
                         }
                     }
                 }
