@@ -9,31 +9,24 @@ namespace GridTravel
     {
         public static void Main()
         {
-
-
-
-            string inWidth;
-            while ((inWidth = Console.ReadLine()) != String.Empty)
+            int width = Int32.Parse(Console.ReadLine());
+            _ = Console.ReadLine(); // height
+            string gridText = Console.ReadLine();
+            var grid = gridText.ToArray();
+            var input = Console.ReadLine();
+            var occurrences = CountOccurences(grid, input.ToCharArray(), out string filteredWord);
+            if (filteredWord.Length > 0)
             {
-                int width = Int32.Parse(inWidth);
-                _ = Console.ReadLine(); // height
-                string gridText = Console.ReadLine();
-                var grid = gridText.ToArray();
-                var input = Console.ReadLine();
-                var occurrences = CountOccurences(grid, input.ToCharArray(), out string filteredWord);
-                if (filteredWord.Length > 0)
-                {
 
-                    var pairs = CreatePairs(filteredWord);
-                    var pathMap = CreatePathMap(width, filteredWord, occurrences, pairs);
-                    var shortestPath = FindShortestPath_PullBack(filteredWord, occurrences, pathMap);
-                    int numberOfStrokes = shortestPath + filteredWord.Length;
-                    Console.WriteLine(numberOfStrokes);
-                }
-                else
-                {
-                    Console.WriteLine(0);
-                }
+                var pairs = CreatePairs(filteredWord);
+                var pathMap = CreatePathMap(width, filteredWord, occurrences, pairs);
+                var shortestPath = FindShortestPath_PullBack(filteredWord, occurrences, pathMap);
+                int numberOfStrokes = shortestPath + filteredWord.Length;
+                Console.WriteLine(numberOfStrokes);
+            }
+            else
+            {
+                Console.WriteLine(0);
             }
         }
 
