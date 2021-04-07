@@ -12,25 +12,23 @@ namespace GridTravel
             int width = Int32.Parse(Console.ReadLine());
             _ = Console.ReadLine(); // height
             string gridText = Console.ReadLine();
-            var grid = gridText.ToArray();
-            var input = Console.ReadLine();
-            var occurrences = CountOccurences(grid, input.ToCharArray(), out string filteredWord);
-            if (filteredWord.Length > 0)
-            {
+            var grid = gridText.ToList();
+            var input = Console.ReadLine().ToList();
 
-                var pairs = CreatePairs(filteredWord);
-                var pathMap = CreatePathMap(width, filteredWord, occurrences, pairs);
-                var shortestPath = FindShortestPath_PullBack(filteredWord, occurrences, pathMap);
-                int numberOfStrokes = shortestPath + filteredWord.Length;
-                Console.WriteLine(numberOfStrokes);
-            }
-            else
+            int numberOfStrokes = 0;
+            var commonLetters = grid.Intersect(input).ToList();
+            if (commonLetters.Count > 0)
             {
-                Console.WriteLine(0);
+                input.RemoveAll(x => !commonLetters.Contains(x));
+                var occurrences = CountOccurences(grid, commonLetters);
+                var pathMap = CreatePathMap(width, input, occurrences);
+                var shortestPath = FindShortestPath_PullBack(input, occurrences, pathMap);
+                numberOfStrokes = shortestPath + input.Count();
             }
+            Console.WriteLine(numberOfStrokes);
         }
 
-        private static int FindShortestPath_PullBack(string word, Dictionary<char, List<int>> occurences, Dictionary<string, int> pathMap)
+        private static int FindShortestPath_PullBack(List<char> word, Dictionary<char, List<int>> occurences, Dictionary<string, int> pathMap)
         {
             /*
             4) Pull - back search
@@ -41,7 +39,7 @@ namespace GridTravel
                 for each currentNode:
                     a) save min(Pi+Di)
             */
-            var wordLength = word.Length - 1;
+            var wordLength = word.Count() - 1;
 
             var distances = new List<int>();
             for (int i = 0; i < occurences[word[wordLength]].Count; i++)
@@ -67,13 +65,13 @@ namespace GridTravel
             return distances.Aggregate(Int32.MaxValue,
                         (shortest, next) =>
                         {
-                            var distance = pathMap[CreateKeyForMap("xxx", word[0], 0, pos++)] + next;
+                            var distance = pathMap[CreateKeyForMap("xx", word[0], 0, pos++)] + next;
                             return Math.Min(distance, shortest);
                         });
 
         }
 
-        private static Dictionary<string, int> CreatePathMap(int width, string word, Dictionary<char, List<int>> occurrences, string[] pairs)
+        private static Dictionary<string, int> CreatePathMap(int width, List<char> word, Dictionary<char, List<int>> occurrences)
         {
             //3) Create path map - dictionary < pair, distance >
             //a) add distance of the first letter
@@ -84,21 +82,19 @@ namespace GridTravel
 
             var firstLetter = occurrences[word[0]];
             for (int i = 0; i < firstLetter.Count; i++)
-                pathMap.Add(CreateKeyForMap("xxx", word[0], 0, i), CountDistance(width, 0, firstLetter[i]));
+                pathMap.Add(CreateKeyForMap("xx", word[0], 0, i), CountDistance(width, 0, firstLetter[i]));
 
-            foreach (var pair in pairs)
+            for (int i = 0; i < word.Count()-1; i++)
             {
-                if (!pathMap.ContainsKey(pair))
+                if (!pathMap.ContainsKey(CreateKeyForMap(word[i], word[i+1], 0, 0)))
                 {
-                    var firstPair = occurrences[pair[0]];
-                    var secondPair = occurrences[pair[1]];
-                    for (int i = 0; i < firstPair.Count; i++)
+                    var firstLetterOccurence = occurrences[word[i]];
+                    var secondLetterOccurence = occurrences[word[i+1]];
+                    for (int j = 0; j < firstLetterOccurence.Count; j++)
                     {
-                        for (int j = 0; j < secondPair.Count; j++)
+                        for (int k = 0; k < secondLetterOccurence.Count; k++)
                         {
-                            var key = CreateKeyForMap(pair, i, j);
-                            if (!pathMap.ContainsKey(key))
-                                pathMap.Add(CreateKeyForMap(pair, i, j), CountDistance(width, firstPair[i], secondPair[j]));
+                            pathMap.Add(CreateKeyForMap(word[i], word[i+1], j, k), CountDistance(width, firstLetterOccurence[j], secondLetterOccurence[k]));
                         }
                     }
                 }
@@ -115,17 +111,12 @@ namespace GridTravel
             return $"{firstLetter}{secondLetter}-{occurenceA}-{occurenceB}";
         }
 
-        private static string CreateKeyForMap(string pair, int occurenceA, int occurenceB)
-        {
-            return $"{pair}-{occurenceA}-{occurenceB}";
-        }
-
         private static int CountDistance(int width, int firstPos, int secondPos)
         {
-            int firstPosX = firstPos % width;
             int firstPosY = firstPos / width;
-            int secondPosX = secondPos % width;
+            int firstPosX = firstPos - (firstPosY * width);
             int secondPosY = secondPos / width;
+            int secondPosX = secondPos - (secondPosY * width);
             return Math.Abs(firstPosX - secondPosX) + Math.Abs(firstPosY - secondPosY);
         }
 
@@ -139,25 +130,15 @@ namespace GridTravel
             return pairs;
         }
 
-        private static Dictionary<char, List<int>> CountOccurences(char[] grid, char[] word, out string filteredWord)
+        private static Dictionary<char, List<int>> CountOccurences(List<char> grid, List<char> commonLetters)
         {
             var occurences = new Dictionary<char, List<int>>();
-            for (int i = 0; i < grid.Length; i++)
+            commonLetters.ForEach(x => occurences.Add(x, new List<int>()));
+
+            for (int i = 0; i < grid.Count(); i++)
             {
-                var currentLetter = grid[i];
-                if (word.Contains(currentLetter))
-                {
-                    if (occurences.ContainsKey(currentLetter))
-                    {
-                        occurences[currentLetter].Add(i);
-                    }
-                    else
-                    {
-                        occurences.Add(currentLetter, new List<int> { i });
-                    }
-                }
+                occurences[grid[i]].Add(i);
             }
-            filteredWord = new string(word.Where(x => occurences.ContainsKey(x)).ToArray());
             return occurences;
         }
     }
